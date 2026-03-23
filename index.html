@@ -1,1 +1,960 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Profe Maker</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --cream: #f5f0e8;
+    --accent: #e85d26;
+    --accent2: #f7b731;
+    --muted: #6b6560;
+    --card-bg: #ffffff;
+    --nav-bg: rgba(245,240,232,0.92);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1.5px solid rgba(15,14,12,0.1);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-logo .dot {
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-cta {
+    background: var(--ink) !important;
+    color: var(--cream) !important;
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--accent) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 80px 6vw 60px;
+    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(232,93,38,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(247,183,49,0.2);
+    border: 1px solid rgba(247,183,49,0.4);
+    color: #a0700a;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title .line2 {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .hero-desc {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(232,93,38,0.35);
+  }
+
+  .btn-ghost {
+    color: var(--ink);
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s;
+  }
+  .btn-ghost:hover { gap: 10px; }
+
+  .hero-stats {
+    display: flex;
+    gap: 2rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(15,14,12,0.12);
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* Hero visual panel */
+  .hero-visual {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .content-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 24px;
+    border: 1.5px solid rgba(15,14,12,0.08);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+  .content-card:hover { transform: translateY(-4px); }
+
+  .content-card.featured {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: var(--ink);
+    color: white;
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .content-card.featured .card-label { color: rgba(255,255,255,0.5); }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .content-card.featured .card-title { color: white; font-size: 1.1rem; }
+
+  .card-badge {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: var(--accent);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+
+  .featured-icon {
+    width: 52px; height: 52px;
+    background: var(--accent);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 100px 6vw;
+  }
+
+  .section-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-desc {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 3rem;
+  }
+
+  /* ── CONTENT GRID ── */
+  #contenido {
+    background: white;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 3rem;
+  }
+
+  .post-card {
+    background: var(--cream);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1.5px solid rgba(15,14,12,0.07);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+
+  .post-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(15,14,12,0.1);
+  }
+
+  .post-thumb {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    position: relative;
+  }
+
+  .post-thumb.video { background: #1a1a2e; }
+  .post-thumb.image { background: #e8f4e8; }
+  .post-thumb.poster { background: #2d1b4e; }
+  .post-thumb.article { background: #fff3e0; }
+  .post-thumb.ebook { background: #e3f2fd; }
+
+  .post-type-tag {
+    position: absolute;
+    top: 12px; left: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.9);
+    color: var(--ink);
+  }
+
+  .post-body {
+    padding: 20px;
+  }
+
+  .post-date {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .post-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .post-excerpt {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── CANALES ── */
+  #canales {
+    background: var(--ink);
+    color: white;
+  }
+
+  #canales .section-title { color: white; }
+  #canales .section-desc { color: rgba(255,255,255,0.55); }
+
+  .canales-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 3rem;
+  }
+
+  .canal-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 28px 24px;
+    transition: background 0.3s, transform 0.3s;
+    text-decoration: none;
+    color: white;
+    display: block;
+  }
+
+  .canal-card:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-4px);
+  }
+
+  .canal-icon {
+    font-size: 2.2rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .canal-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .canal-handle {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 14px;
+  }
+
+  .canal-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .canal-link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    font-size: 0.82rem;
+    color: var(--accent2);
+    font-weight: 500;
+  }
+
+  /* ── EBOOKS ── */
+  #ebooks {
+    background: var(--cream);
+  }
+
+  .ebooks-row {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .ebook-card {
+    background: white;
+    border-radius: 24px;
+    padding: 32px 28px;
+    border: 1.5px solid rgba(15,14,12,0.07);
+    flex: 1;
+    min-width: 260px;
+    transition: transform 0.3s;
+  }
+  .ebook-card:hover { transform: translateY(-4px); }
+
+  .ebook-cover {
+    width: 100%;
+    height: 200px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    font-weight: 800;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .ebook-cover.coming {
+    background: linear-gradient(135deg, #2d1b4e 0%, #e85d26 100%);
+    color: white;
+    font-size: 2rem;
+    opacity: 0.7;
+    position: relative;
+  }
+
+  .soon-badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: var(--accent2);
+    color: #5a3e00;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  .ebook-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    line-height: 1.25;
+  }
+
+  .ebook-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* ── ABOUT ── */
+  #sobre-mi {
+    background: white;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .about-avatar {
+    aspect-ratio: 1;
+    background: linear-gradient(145deg, #e85d26 0%, #f7b731 100%);
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+    max-width: 360px;
+  }
+
+  .about-body .section-desc { max-width: 100%; }
+
+  .skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 1.5rem;
+  }
+
+  .skill-pill {
+    background: var(--cream);
+    border: 1px solid rgba(15,14,12,0.12);
+    color: var(--ink);
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 100px;
+  }
+
+  /* ── CONTACTO ── */
+  #contacto {
+    background: var(--cream);
+  }
+
+  .contact-box {
+    background: var(--ink);
+    color: white;
+    border-radius: 32px;
+    padding: 64px;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .contact-box .section-title { color: white; margin-bottom: 1rem; }
+  .contact-box p { color: rgba(255,255,255,0.6); margin-bottom: 2rem; line-height: 1.7; }
+
+  .contact-links {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .contact-btn {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .contact-btn:hover { background: rgba(255,255,255,0.18); }
+  .contact-btn.primary-btn {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .contact-btn.primary-btn:hover { background: #d04a18; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.82rem;
+  }
+
+  footer span { color: var(--accent); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-content > * {
+    opacity: 0;
+    animation: fadeUp 0.7s forwards;
+  }
+  .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+  .hero-content > *:nth-child(5) { animation-delay: 0.5s; }
+
+  .hero-visual {
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+  }
+
+  /* ── HAMBURGER MOBILE ── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px; height: 2px;
+    background: var(--ink);
+    border-radius: 2px;
+    transition: 0.3s;
+  }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding-top: 100px; }
+    .hero-visual { display: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    .about-avatar { max-width: 200px; }
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      background: var(--cream);
+      padding: 2rem;
+      border-bottom: 1.5px solid rgba(15,14,12,0.1);
+      gap: 1.5rem;
+    }
+    .hamburger { display: flex; }
+    .contact-box { padding: 36px 24px; }
+    section { padding: 70px 5vw; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="dot"></span> El Profe Maker
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#contenido">Contenido</a></li>
+    <li><a href="#canales">Canales</a></li>
+    <li><a href="#ebooks">eBooks</a></li>
+    <li><a href="#sobre-mi">Sobre mí</a></li>
+    <li><a href="#contacto" class="nav-cta">Contacto</a></li>
+  </ul>
+  <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">📚 Educación Digital · Marketing de Contenidos</div>
+    <h1 class="hero-title">
+      Aprende.<br>
+      <span class="line2">Crea.</span><br>
+      Comparte.
+    </h1>
+    <p class="hero-desc">
+      Soy el Profe Maker: docente, creador de contenido educativo digital. 
+      Aquí encuentras videos, tutoriales, pósters, artículos y próximos eBooks 
+      para dominar el mundo digital.
+    </p>
+    <div class="hero-actions">
+      <a href="#contenido" class="btn-primary">Ver contenido →</a>
+      <a href="#canales" class="btn-ghost">Mis canales →</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">9+</div>
+        <div class="stat-label">Proyectos activos</div>
+      </div>
+      <div>
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Contenido educativo</div>
+      </div>
+      <div>
+        <div class="stat-num">🚀</div>
+        <div class="stat-label">eBooks próximamente</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="content-card featured">
+      <div class="featured-icon">▶</div>
+      <div>
+        <div class="card-label">Último video</div>
+        <div class="card-title">Introducción a los Contenidos Digitales para Principiantes</div>
+      </div>
+    </div>
+    <div class="content-card">
+      <div class="card-badge">Nuevo</div>
+      <span class="card-icon">🖼️</span>
+      <div class="card-label">Galería</div>
+      <div class="card-title">Infografías educativas</div>
+    </div>
+    <div class="content-card">
+      <span class="card-icon">📖</span>
+      <div class="card-label">eBook</div>
+      <div class="card-title">Próximamente...</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENIDO -->
+<section id="contenido">
+  <div class="section-label">📌 Publicaciones recientes</div>
+  <h2 class="section-title">Contenido para aprender<br>y crecer</h2>
+  <p class="section-desc">
+    Videos, imágenes, pósters y artículos sobre tecnología educativa, 
+    creación de contenido digital y marketing para docentes y creadores.
+  </p>
+
+  <div class="content-grid">
+    <div class="post-card">
+      <div class="post-thumb video">
+        <span class="post-type-tag">🎬 Video</span>
+        ▶
+      </div>
+      <div class="post-body">
+        <div class="post-date">Próximamente</div>
+        <div class="post-name">Cómo crear tu primera estrategia de contenido digital</div>
+        <div class="post-excerpt">Guía paso a paso para docentes que quieren empezar a crear en redes.</div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb image">
+        <span class="post-type-tag">🖼️ Imagen</span>
+        🎨
+      </div>
+      <div class="post-body">
+        <div class="post-date">Próximamente</div>
+        <div class="post-name">Pack de infografías: Integración de Contenidos</div>
+        <div class="post-excerpt">Recursos visuales listos para compartir en tus redes sociales.</div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb poster">
+        <span class="post-type-tag">🎭 Póster</span>
+        ✦
+      </div>
+      <div class="post-body">
+        <div class="post-date">Próximamente</div>
+        <div class="post-name">Los 10 formatos de contenido que más convierten</div>
+        <div class="post-excerpt">Póster educativo descargable con los formatos más efectivos del 2025.</div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-thumb article">
+        <span class="post-type-tag">📝 Artículo</span>
+        ✍️
+      </div>
+      <div class="post-body">
+        <div class="post-date">Próximamente</div>
+        <div class="post-name">Marketing educativo: qué es y cómo aplicarlo</div>
+        <div class="post-excerpt">Una guía completa para docentes que quieren monetizar su conocimiento.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CANALES -->
+<section id="canales">
+  <div class="section-label">📡 Encuéntrame en</div>
+  <h2 class="section-title">Mis canales digitales</h2>
+  <p class="section-desc">
+    Sígueme en mis redes para no perderte ningún contenido educativo. 
+    Cada plataforma tiene su propio tipo de contenido.
+  </p>
+
+  <div class="canales-grid">
+    <a href="#" class="canal-card">
+      <span class="canal-icon">▶️</span>
+      <div class="canal-name">YouTube</div>
+      <div class="canal-handle">@ElProfeMaker</div>
+      <div class="canal-desc">Videos tutoriales, clases completas y contenido educativo en profundidad.</div>
+      <div class="canal-link-arrow">Ver canal →</div>
+    </a>
+
+    <a href="#" class="canal-card">
+      <span class="canal-icon">📸</span>
+      <div class="canal-name">Instagram</div>
+      <div class="canal-handle">@elprofemaker</div>
+      <div class="canal-desc">Infografías, pósters educativos y recursos visuales para descargar.</div>
+      <div class="canal-link-arrow">Seguir →</div>
+    </a>
+
+    <a href="#" class="canal-card">
+      <span class="canal-icon">🎵</span>
+      <div class="canal-name">TikTok</div>
+      <div class="canal-handle">@elprofemaker</div>
+      <div class="canal-desc">Tips rápidos, trucos digitales y contenido educativo en formato corto.</div>
+      <div class="canal-link-arrow">Ver videos →</div>
+    </a>
+
+    <a href="#" class="canal-card">
+      <span class="canal-icon">💼</span>
+      <div class="canal-name">LinkedIn</div>
+      <div class="canal-handle">El Profe Maker</div>
+      <div class="canal-desc">Artículos de fondo sobre educación digital y tendencias en marketing de contenidos.</div>
+      <div class="canal-link-arrow">Conectar →</div>
+    </a>
+  </div>
+</section>
+
+<!-- EBOOKS -->
+<section id="ebooks">
+  <div class="section-label">📚 Próximas publicaciones</div>
+  <h2 class="section-title">eBooks en camino</h2>
+  <p class="section-desc">
+    Guías digitales completas para que aprendas a crear, publicar y monetizar 
+    tu conocimiento como docente creador de contenido.
+  </p>
+
+  <div class="ebooks-row">
+    <div class="ebook-card">
+      <div class="ebook-cover coming" style="position:relative">
+        <span class="soon-badge">Muy pronto</span>
+        📘
+      </div>
+      <div class="ebook-title">Docente Digital: De la Aula a las Redes</div>
+      <div class="ebook-desc">Todo lo que necesitas saber para llevar tu conocimiento al mundo digital. Para profesores que quieren empezar a crear contenido.</div>
+    </div>
+
+    <div class="ebook-card">
+      <div class="ebook-cover coming" style="position:relative">
+        <span class="soon-badge">En desarrollo</span>
+        📗
+      </div>
+      <div class="ebook-title">Marketing de Contenidos para Creadores Educativos</div>
+      <div class="ebook-desc">Estrategias probadas para hacer crecer tu audiencia y monetizar tu contenido educativo en plataformas digitales.</div>
+    </div>
+
+    <div class="ebook-card">
+      <div class="ebook-cover coming" style="position:relative">
+        <span class="soon-badge">Planeado</span>
+        📙
+      </div>
+      <div class="ebook-title">Integración de Contenidos Digitales: Guía Práctica</div>
+      <div class="ebook-desc">El manual definitivo para diseñar, producir y distribuir contenido educativo en múltiples formatos y plataformas.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE MÍ -->
+<section id="sobre-mi">
+  <div class="about-grid">
+    <div class="about-avatar">👨‍🏫</div>
+    <div class="about-body">
+      <div class="section-label">👋 Quién soy</div>
+      <h2 class="section-title">El Profe Maker</h2>
+      <p class="section-desc">
+        Soy docente de la carrera técnica <strong>Integración de Contenidos Digitales</strong>. 
+        Acompaño a mis estudiantes en la creación de proyectos digitales reales, y comparto 
+        todo lo que aprendo en el camino a través de mis redes sociales, canal de YouTube y 
+        próximos eBooks.
+      </p>
+      <p class="section-desc">
+        Mi misión es demostrar que un docente puede ser también un creador de contenido 
+        profesional, y que la educación y el marketing digital van de la mano.
+      </p>
+      <div class="skills-list">
+        <span class="skill-pill">Contenidos Digitales</span>
+        <span class="skill-pill">Marketing Educativo</span>
+        <span class="skill-pill">Producción de Video</span>
+        <span class="skill-pill">Diseño Gráfico</span>
+        <span class="skill-pill">YouTube</span>
+        <span class="skill-pill">Redes Sociales</span>
+        <span class="skill-pill">eBooks</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="contact-box">
+    <div class="section-label" style="color: var(--accent2)">✉️ Hablemos</div>
+    <h2 class="section-title">¿Tienes un proyecto<br>o colaboración?</h2>
+    <p>¿Quieres que sea parte de tu proyecto educativo, dar una charla, 
+    o colaborar en algún contenido? Escríbeme y conversamos.</p>
+    <div class="contact-links">
+      <a href="mailto:tuemail@correo.com" class="contact-btn primary-btn">📧 Enviar correo</a>
+      <a href="#" class="contact-btn">📸 Instagram</a>
+      <a href="#" class="contact-btn">▶️ YouTube</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 <span>El Profe Maker</span> — Todos los derechos reservados · Hecho con 💛 para la educación digital</p>
+</footer>
+
+</body>
+</html>
 
